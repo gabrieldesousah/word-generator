@@ -1,8 +1,8 @@
 const fs = require('fs');
 
-async function generateWord(req, res)
+function generateWord(req, res)
 {
-    await fs.readFile('./syllables/pt.json', 'utf8', (err, data) => {
+    fs.readFile('./syllables/pt.json', 'utf8', (err, data) => {
         if(err) {
             return console.log("Erro ao ler arquivo", err);
         }
@@ -11,14 +11,27 @@ async function generateWord(req, res)
         // const indices = Object.keys(jsonData);
         const values = Object.values(jsonData);
 
-        let allSyllables = [];
-        for(let i=0; i<values.length; i++) {
-            allSyllables = allSyllables.concat(values[i]);
+        let SyllablesWithVogals = jsonData.vogals;
+        SyllablesWithVogals = Object.values(SyllablesWithVogals);
+        let SyllablesWithConsoants = jsonData.consoants;
+        SyllablesWithConsoants = Object.values(SyllablesWithConsoants);
+
+        let allSyllablesWithVogals = [];
+        for(let i=0; i<SyllablesWithVogals.length; i++) {
+            allSyllablesWithVogals = allSyllablesWithVogals.concat(SyllablesWithVogals[i])
         }
+        
+        let allSyllablesWithConsoants = [];
+        for(let i=0; i<SyllablesWithConsoants.length; i++) {
+            allSyllablesWithConsoants = allSyllablesWithConsoants.concat(SyllablesWithConsoants[i])
+        }
+
+        let allSyllables = [];
+        allSyllables = allSyllablesWithConsoants.concat(allSyllablesWithVogals);
 
         let numberOfSyllables = Math.floor(Math.random(1, 2)*10);
         numberOfSyllables = (numberOfSyllables == 1) ? 2 : numberOfSyllables;
-        numberOfSyllables = (numberOfSyllables > 5) ? 5 : numberOfSyllables;
+        numberOfSyllables = (numberOfSyllables >= 4) ? 4 : numberOfSyllables;
 
         let word = "";
         for(let i=0; i < numberOfSyllables; i++) {

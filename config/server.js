@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const routes = require("../routes");
+const monrgan = require("morgan");
 
 var server = null;
 
@@ -10,7 +11,7 @@ function start()
         const app = express();
 
         app.use(bodyParser.json());
-
+        app.use(monrgan('dev'));
         app.use("/", routes);
 
         server = app.listen(3000);
